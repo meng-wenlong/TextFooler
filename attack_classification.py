@@ -6,7 +6,8 @@ from train_classifier import Model
 import criteria
 import random
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
 import tensorflow_hub as hub
 
 import torch
