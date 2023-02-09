@@ -15,7 +15,9 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader, SequentialSampler, TensorDataset
 
 from BERT.tokenization import BertTokenizer
-from BERT.modeling import BertForSequenceClassification, BertConfig
+from BERT.modeling import BertForSequenceClassification
+
+from model_arch import Infer_RoBERTa
 
 
 class USE(object):
@@ -196,7 +198,8 @@ class NLIDataset_BERT(Dataset):
 
 def attack(text_ls, true_label, predictor, stop_words_set, word2idx, idx2word, cos_sim, sim_predictor=None,
            import_score_threshold=-1., sim_score_threshold=0.5, sim_score_window=15, synonym_num=50,
-           batch_size=32):
+           batch_size=32,
+           max_perturb_num=0,):
     # first check the prediction of the original text
     orig_probs = predictor([text_ls]).squeeze()
     orig_label = torch.argmax(orig_probs)
@@ -290,6 +293,12 @@ def attack(text_ls, true_label, predictor, stop_words_set, word2idx, idx2word, c
                     text_prime[idx] = synonyms[new_label_prob_argmin]
                     num_changed += 1
             text_cache = text_prime[:]
+
+            if max_perturb_num > 0:
+                if num_changed == max_perturb_num:
+                    break
+                elif num_changed > max_perturb_num:
+                    raise Exception("Unexpected num_changed")
         return ' '.join(text_prime), num_changed, orig_label, torch.argmax(predictor([text_prime])), num_queries
 
 
@@ -454,6 +463,10 @@ def main():
                         default=128,
                         type=int,
                         help="max sequence length for BERT target model")
+    parser.add_argument("--max_perturb_num",
+                        default=0,
+                        type=int,
+                        help="max num of words to change in one input, 0 means no constrain")
 
     args = parser.parse_args()
 
@@ -480,6 +493,8 @@ def main():
         model.load_state_dict(checkpoint)
     elif args.target_model == 'bert':
         model = NLI_infer_BERT(args.target_model_path, nclasses=args.nclasses, max_seq_length=args.max_seq_length)
+    elif args.target_model == 'roberta':
+        model = Infer_RoBERTa(args.target_model_path, nclasses=args.nclasses, max_seq_length=args.max_seq_length)
     predictor = model.text_pred
     print("Model built!")
 
@@ -551,7 +566,8 @@ def main():
                                             import_score_threshold=args.import_score_threshold,
                                             sim_score_window=args.sim_score_window,
                                             synonym_num=args.synonym_num,
-                                            batch_size=args.batch_size)
+                                            batch_size=args.batch_size,
+                                            max_perturb_num=args.max_perturb_num)
 
         if true_label != orig_label:
             orig_failures += 1

@@ -1,0 +1,73 @@
+nohup: ignoring input
+2023-02-07 17:06:21.635541: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-02-07 17:06:21.809992: I tensorflow/core/util/port.cc:104] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-02-07 17:06:22.419164: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory
+2023-02-07 17:06:22.419245: W tensorflow/compiler/xla/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory
+2023-02-07 17:06:22.419255: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+Output directory (adv_results) already exists and is not empty.
+Data import finished!
+Building Model...
+Model built!
+Building vocab...
+Building cos sim matrix...
+Load pre-computed cosine similarity matrix from cos_sim_counter_fitting.npy
+Cos sim import finished!
+2023-02-07 17:06:35.402469: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-02-07 17:06:35.407626: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1613] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 30084 MB memory:  -> device: 0, name: Tesla V100S-PCIE-32GB, pci bus id: 0000:3b:00.0, compute capability: 7.0
+2023-02-07 17:06:35.459904: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1613] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 30084 MB memory:  -> device: 0, name: Tesla V100S-PCIE-32GB, pci bus id: 0000:3b:00.0, compute capability: 7.0
+2023-02-07 17:06:36.780848: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:357] MLIR V1 optimization pass is not enabled
+Start attacking!
+0 samples out of 1000 have been finished!
+20 samples out of 1000 have been finished!
+40 samples out of 1000 have been finished!
+60 samples out of 1000 have been finished!
+80 samples out of 1000 have been finished!
+100 samples out of 1000 have been finished!
+120 samples out of 1000 have been finished!
+140 samples out of 1000 have been finished!
+160 samples out of 1000 have been finished!
+180 samples out of 1000 have been finished!
+200 samples out of 1000 have been finished!
+220 samples out of 1000 have been finished!
+240 samples out of 1000 have been finished!
+260 samples out of 1000 have been finished!
+280 samples out of 1000 have been finished!
+300 samples out of 1000 have been finished!
+320 samples out of 1000 have been finished!
+340 samples out of 1000 have been finished!
+360 samples out of 1000 have been finished!
+380 samples out of 1000 have been finished!
+400 samples out of 1000 have been finished!
+420 samples out of 1000 have been finished!
+440 samples out of 1000 have been finished!
+460 samples out of 1000 have been finished!
+480 samples out of 1000 have been finished!
+500 samples out of 1000 have been finished!
+520 samples out of 1000 have been finished!
+540 samples out of 1000 have been finished!
+560 samples out of 1000 have been finished!
+580 samples out of 1000 have been finished!
+600 samples out of 1000 have been finished!
+620 samples out of 1000 have been finished!
+640 samples out of 1000 have been finished!
+660 samples out of 1000 have been finished!
+680 samples out of 1000 have been finished!
+700 samples out of 1000 have been finished!
+720 samples out of 1000 have been finished!
+740 samples out of 1000 have been finished!
+760 samples out of 1000 have been finished!
+780 samples out of 1000 have been finished!
+800 samples out of 1000 have been finished!
+820 samples out of 1000 have been finished!
+840 samples out of 1000 have been finished!
+860 samples out of 1000 have been finished!
+880 samples out of 1000 have been finished!
+900 samples out of 1000 have been finished!
+920 samples out of 1000 have been finished!
+940 samples out of 1000 have been finished!
+960 samples out of 1000 have been finished!
+980 samples out of 1000 have been finished!
+For target model bert: original accuracy: 97.600%, adv accuracy: 53.300%, avg changed rate: 9.094%, num of queries: 445.2
+
