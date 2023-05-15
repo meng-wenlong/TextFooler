@@ -5,6 +5,7 @@ import dataloader
 from train_classifier import Model
 import criteria
 import random
+import time
 
 import tensorflow.compat.v1 as tf
 tf.disable_eager_execution()
@@ -402,7 +403,7 @@ def main():
     parser.add_argument("--target_model",
                         type=str,
                         required=True,
-                        choices=['wordLSTM', 'bert', 'wordCNN'],
+                        choices=['wordLSTM', 'bert', 'wordCNN', 'roberta'],
                         help="Target models for text classification: fasttext, charcnn, word level lstm "
                              "For NLI: InferSent, ESIM, bert-base-uncased")
     parser.add_argument("--target_model_path",
@@ -546,6 +547,7 @@ def main():
 
     stop_words_set = criteria.get_stopwords()
     print('Start attacking!')
+    start_time = time.time()
     for idx, (text, true_label) in enumerate(data):
         if idx % 20 == 0:
             print('{} samples out of {} have been finished!'.format(idx, args.data_size))
@@ -585,6 +587,10 @@ def main():
             true_labels.append(true_label)
             new_labels.append(new_label)
 
+    end_time = time.time()
+    print("Consuming time:", end_time - start_time)
+
+    # FIXME The divided number should not be 1000; it should be len(data)
     message = 'For target model {}: original accuracy: {:.3f}%, adv accuracy: {:.3f}%, ' \
               'avg changed rate: {:.3f}%, num of queries: {:.1f}\n'.format(args.target_model,
                                                                      (1-orig_failures/1000)*100,

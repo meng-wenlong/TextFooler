@@ -1,0 +1,1 @@
+For target model roberta: original accuracy: 96.700%, adv accuracy: 72.900%, avg changed rate: 2.342%, num of queries: 375.0

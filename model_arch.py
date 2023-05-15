@@ -4,6 +4,8 @@ from torch.utils.data import Dataset, DataLoader, SequentialSampler, TensorDatas
 
 from transformers import RobertaForSequenceClassification, RobertaTokenizer
 
+import os
+
 
 class HFInputFeatures(object):
     """A single set of features of data."""
@@ -18,17 +20,17 @@ class Dataset_RoBERTa(Dataset):
                  pretrained_dir,
                  max_seq_length=128,
                  batch_size=32):
-        self.tokenizer = RobertaTokenizer.from_pretrained(pretrained_dir)
+        self.tokenizer = RobertaTokenizer.from_pretrained(os.path.join(pretrained_dir, 'tokenizer'))
         self.max_seq_length = max_seq_length
         self.batch_size = batch_size
 
-    def convert_examples_to_features(self, examples, max_seq_length, tokenizer):
+    def convert_examples_to_features(self, examples):
         features = []
         for (ex_index, text_a) in enumerate(examples):
-            token_a = tokenizer.tokenize(' '.join(text_a))
+            sent_a = ' '.join(text_a)
             
             encoding = self.tokenizer(
-                token_a,
+                sent_a,
                 max_length=self.max_seq_length,
                 padding="max_length",
                 truncation=True
@@ -45,7 +47,7 @@ class Dataset_RoBERTa(Dataset):
 
     def transform_text(self, data, batch_size=32):
         # transform data into seq of embeddings
-        eval_features = self.convert_examples_to_features(data, self.max_seq_length, self.tokenizer)
+        eval_features = self.convert_examples_to_features(data)
 
         all_input_ids = torch.tensor([f.input_ids for f in eval_features], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in eval_features], dtype=torch.long)
@@ -83,7 +85,7 @@ class Infer_RoBERTa(nn.Module):
             input_mask = input_mask.cuda()
 
             with torch.no_grad():
-                logits = self.model(input_ids, input_mask)
+                logits = self.model(input_ids, input_mask)['logits']
                 probs = nn.functional.softmax(logits, dim=-1)
                 probs_all.append(probs)
 
